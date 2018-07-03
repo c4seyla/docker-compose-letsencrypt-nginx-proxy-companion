@@ -28,7 +28,27 @@ In order to use this compose file (docker-compose.yml) you must have:
 
 ```bash
 git clone https://github.com/evertramos/docker-compose-letsencrypt-nginx-proxy-companion.git
-```
+
+cd /usr/src/
+git clone https://github.com/SpiderLabs/ModSecurity
+mkdir  /etc/nginx/data/conf
+cp modsecurity.conf-recommended /etc/nginx/data/conf/modsecurity.conf
+vi /etc/nginx/data/conf/modsecurity.conf
+add these lines to the end
+
+SecStatusEngine On
+#Load OWASP Config 
+Include crs-setup.conf 
+#Load all other Rules 
+Include rules/*.conf 
+#Disable rule by ID from error message 
+#SecRuleRemoveById 920350
+
+git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git 
+
+cd owasp-modsecurity-crs/
+cp -R rules/ /etc/nginx/data/conf/
+cp -R crs-setup.conf.example /etc/nginx/data/conf/crs-setup.conf
 
 2. Make a copy of our `.env.sample` and rename it to `.env`:
 
